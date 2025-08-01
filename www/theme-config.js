@@ -15,17 +15,8 @@ const THEMES = [
     stylesheet: 'openedx-theme',
     pathToVariables: undefined,
   },
-  {
-    id: 'edxorg',
-    label: 'edX.org',
-    stylesheet: 'edxorg-theme',
-    pathToVariables: '@edx/brand-edx.org/paragon/_variables.scss',
-  },
 ];
-
-const DEFAULT_THEME = 'openedx';
 
 module.exports = {
   THEMES,
-  DEFAULT_THEME,
 };

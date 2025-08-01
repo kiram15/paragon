@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 const chalk = require('chalk');
 const themeCommand = require('../lib/install-theme');
-const helpCommand = require('../lib/help');
+const { helpCommand } = require('../lib/help');
 const buildTokensCommand = require('../lib/build-tokens');
 const replaceVariablesCommand = require('../lib/replace-variables');
 const buildScssCommand = require('../lib/build-scss');
+const serveThemeCssCommand = require('../lib/serve-theme-css');
 const { sendTrackInfo } = require('../lib/utils');
 const versionCommand = require('../lib/version');
 const migrateToOpenEdxScopeCommand = require('../lib/migrate-to-openedx-scope');
@@ -97,6 +98,11 @@ const COMMANDS = {
         defaultValue: 'light',
       },
       {
+        name: '--exclude-core',
+        description: 'Exclude core from the token build.',
+        defaultValue: false,
+      },
+      {
         name: '-v, --verbose',
         description: 'Enable verbose logging.',
         defaultValue: false,
@@ -143,6 +149,11 @@ const COMMANDS = {
         defaultValue: 'styles/scss/core/core.scss',
       },
       {
+        name: '--excludeCore',
+        description: 'Exclude core from the SCSS build.',
+        defaultValue: false,
+      },
+      {
         name: '--themesPath',
         description: `Path to the directory that contains themes' files. Expects directory to have following structure:
           themes/
@@ -178,6 +189,42 @@ const COMMANDS = {
       },
     ],
   },
+  'serve-theme-css': {
+    executor: serveThemeCssCommand,
+    description: 'Serves theme CSS files on a local server as if they were on a CDN.',
+    options: [
+      {
+        name: '-b, --build-dir',
+        description: 'The directory containing built CSS files to serve.',
+        defaultValue: './dist',
+      },
+      {
+        name: '-p, --port',
+        description: 'The port to serve files on.',
+        defaultValue: 3000,
+      },
+      {
+        name: '-h, --host',
+        description: 'The host to serve files on.',
+        defaultValue: 'localhost',
+      },
+      {
+        name: '--cors',
+        description: 'Whether to enable CORS headers.',
+        defaultValue: true,
+      },
+      {
+        name: '-t, --theme-name',
+        description: 'The name for the theme in the docs URL.',
+        defaultValue: 'Local Theme',
+      },
+      {
+        name: '-d, --docs-url',
+        description: 'The base URL for the Paragon docs site.',
+        defaultValue: 'https://paragon-openedx.netlify.app/',
+      },
+    ],
+  },
   help: {
     executor: (args) => helpCommand(COMMANDS, args),
     parameters: [
@@ -185,7 +232,7 @@ const COMMANDS = {
         name: 'command',
         description: 'Specifies command name.',
         defaultValue: '\'\'',
-        choices: '[install-theme|build-tokens|replace-variables|build-scss]',
+        choices: '[install-theme|build-tokens|replace-variables|build-scss|serve-theme-css]',
         required: false,
       },
     ],
@@ -224,3 +271,7 @@ const COMMANDS = {
     process.exit(1);
   }
 })();
+
+module.exports = {
+  COMMANDS,
+};

@@ -31,13 +31,15 @@
     "commit": "commit",
     "debug-test": "node --inspect-brk node_modules/.bin/jest --runInBand --coverage",
     "stylelint": "stylelint \"src/**/*.scss\" \"scss/**/*.scss\" \"www/src/**/*.scss\" --config .stylelintrc.json",
-    "lint": "npm run stylelint && eslint --ext .js --ext .jsx --ext .ts --ext .tsx . && npm run lint --workspaces --if-present",
+    "lint": "npm run stylelint && eslint --ext .js --ext .jsx --ext .ts --ext .tsx --ext .json . && npm run lint --workspaces --if-present",
+    "lint:fix": "npm run stylelint && eslint --fix --ext .js --ext .jsx --ext .ts --ext .tsx --ext .json . && npm run lint --workspaces --if-present",
     "prepublishOnly": "npm run build",
     "semantic-release": "semantic-release",
     "snapshot": "jest --updateSnapshot",
     "start": "npm start --workspace=www",
     "test": "jest --coverage",
     "test:watch": "npm run test -- --watch",
+    "test:watch-no-coverage": "npm run test:watch -- --coverage=false",
     "generate-component": "npm start --workspace=component-generator",
     "example:start": "npm start --workspace=example",
     "example:start:with-theme": "npm run start:with-theme --workspace=example",
@@ -52,6 +54,7 @@
     "prepare": "husky || true",
     "build-tokens": "./bin/paragon-scripts.js build-tokens --build-dir ./styles/css",
     "build-tokens:watch": "npx nodemon --ignore styles/css -x \"npm run build-tokens\"",
+    "serve-theme-css": "./bin/paragon-scripts.js serve-theme-css --build-dir ./dist --theme-name='Custom Theme Name'",
     "replace-variables-usage-with-css": "./bin/paragon-scripts.js replace-variables -p src -t usage",
     "replace-variables-definition-with-css": "./bin/paragon-scripts.js replace-variables -p src -t definition",
     "cli:help": "./bin/paragon-scripts.js help"
@@ -74,6 +77,7 @@
     "js-toml": "^1.0.0",
     "lodash.uniqby": "^4.7.0",
     "log-update": "^4.0.0",
+    "lz-string": "^1.5.0",
     "mailto-link": "^2.0.0",
     "minimist": "^1.2.8",
     "ora": "^5.4.1",
@@ -140,6 +144,10 @@
     "babel-loader": "^8.2.4",
     "commander": "^9.3.0",
     "eslint": "8.18.0",
+    "eslint-config-airbnb": "19.0.4",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-plugin-import": "2.27.5",
+    "eslint-plugin-jsonc": "^2.18.1",
     "eslint-plugin-jsx-a11y": "6.7.1",
     "husky": "^9.0.11",
     "identity-obj-proxy": "^3.0.0",
@@ -197,7 +205,7 @@
     "extends @edx/browserslist-config"
   ],
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
+    "*.{js,jsx,ts,tsx,json}": [
       "npx eslint"
     ],
     "*.scss": [
